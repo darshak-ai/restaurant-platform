@@ -5,6 +5,12 @@ import { MenuPage } from './pages/MenuPage';
 import { LocationsPage } from './pages/LocationsPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminOrders } from './pages/admin/AdminOrders';
+import { AdminMenu } from './pages/admin/AdminMenu';
+import { AdminRestaurant } from './pages/admin/AdminRestaurant';
+import { AdminCMS } from './pages/admin/AdminCMS';
 
 function App() {
   return (
@@ -19,8 +25,13 @@ function App() {
           <Route path="locations" element={<LocationsPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
-          <Route path="admin" element={<div className="p-8 text-center">Admin Dashboard - Coming Soon</div>} />
-          <Route path="admin/login" element={<div className="p-8 text-center">Admin Login - Coming Soon</div>} />
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/login" element={<AdminLogin />} />
+          <Route path="admin/dashboard" element={<AdminDashboard />} />
+          <Route path="admin/orders" element={<AdminOrders />} />
+          <Route path="admin/menu" element={<AdminMenu />} />
+          <Route path="admin/restaurant" element={<AdminRestaurant />} />
+          <Route path="admin/cms" element={<AdminCMS />} />
         </Route>
       </Routes>
     </Router>

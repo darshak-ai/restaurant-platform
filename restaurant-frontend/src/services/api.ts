@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Restaurant, Menu, MenuItem, Order, User, CMSContent } from '../types';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -153,9 +153,55 @@ export const orderApi = {
     return response.data;
   },
   
+  getAllOrders: async (): Promise<Order[]> => {
+    const response = await api.get('/orders/');
+    return response.data;
+  },
+  
   updateOrder: async (id: number, orderData: Partial<Order>): Promise<Order> => {
     const response = await api.put(`/orders/${id}`, orderData);
     return response.data;
+  },
+  
+  updateOrderStatus: async (id: number, status: string): Promise<Order> => {
+    const response = await api.put(`/orders/${id}`, { status });
+    return response.data;
+  },
+  
+  getAnalytics: async (restaurantId?: number): Promise<any> => {
+    if (restaurantId) {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30); // Last 30 days
+      const endDate = new Date();
+      
+      const response = await api.get(`/orders/restaurant/${restaurantId}/analytics`, {
+        params: {
+          start_date: startDate.toISOString(),
+          end_date: endDate.toISOString()
+        }
+      });
+      return response.data;
+    } else {
+      const orders = await api.get('/orders/');
+      const orderData = orders.data;
+      
+      const totalOrders = orderData.length;
+      const totalRevenue = orderData.reduce((sum: number, order: any) => sum + order.total_amount, 0);
+      const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+      
+      const pendingOrders = orderData.filter((order: any) => order.status === 'pending').length;
+      const completedOrders = orderData.filter((order: any) => order.status === 'completed').length;
+      const cancelledOrders = orderData.filter((order: any) => order.status === 'cancelled').length;
+      
+      return {
+        total_orders: totalOrders,
+        total_revenue: totalRevenue,
+        average_order_value: averageOrderValue,
+        pending_orders: pendingOrders,
+        completed_orders: completedOrders,
+        cancelled_orders: cancelledOrders
+      };
+    }
   },
   
   cancelOrder: async (id: number): Promise<void> => {
