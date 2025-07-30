@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Restaurant, Menu, MenuItem, Order, User, CMSContent } from '../types';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://app-mozupuyg.fly.dev';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
